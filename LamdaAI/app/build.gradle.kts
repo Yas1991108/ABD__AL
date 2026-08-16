@@ -114,17 +114,15 @@ dependencies {
     // request, and that build frequently fails/times out on JitPack's
     // shared infrastructure. Instead we pull the prebuilt .aar straight
     // from the project's own GitHub Releases (this is k2-fsa's own
-    // documented distribution method) and reference it as a local file.
-    // The CI workflow downloads this file into app/libs/ BEFORE this
-    // build script runs — see .github/workflows/main.yml, step
-    // "Download sherpa-onnx AAR".
-    //
-    // NOTE: sherpa-onnx.aar already bundles its own libonnxruntime.so —
-    // do NOT also add a separate onnxruntime-android dependency here, it
-    // causes a duplicate .so file conflict at packaging time
+    // documented distribution method, see jitpack.yml in their repo) and
+    // reference it as a local file. The CI workflow downloads this file
+    // into app/libs/ BEFORE this build script runs — see
+    // .github/workflows/build.yml, step "Download sherpa-onnx AAR".
+    // --------------------------------------------------------------------
+    // NOTE: sherpa-onnx.aar already bundles its own libonnxruntime.so — do
+    // NOT also add a separate onnxruntime-android dependency here, it causes
+    // a duplicate .so file conflict at packaging time
     // (":app:mergeDebugNativeLibs" fails with "2 files found with path
     // lib/arm64-v8a/libonnxruntime.so").
-    // --------------------------------------------------------------------
     implementation(files("libs/sherpa-onnx.aar"))
 }
-</parameter>
