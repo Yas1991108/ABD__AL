@@ -59,7 +59,7 @@ class AssetModelInstaller(private val context: Context) {
         try {
             val am = context.assets
             val toCopy = buildList {
-                if (am.exists(ASSET_LLM)) add(ASSET_LLM to File(installRoot, "models/SmolLM2-360M-Instruct-Q4_K_M.gguf"))
+                if (assetExists(ASSET_LLM)) add(ASSET_LLM to File(installRoot, "models/SmolLM2-360M-Instruct-Q4_K_M.gguf"))
                 addAll(listAssetFilesRecursively(ASSET_ASR_DIR).map { it to File(installRoot, "voice-models/asr/${it.removePrefix("$ASSET_ASR_DIR/")}") })
                 addAll(listAssetFilesRecursively(ASSET_TTS_DIR).map { it to File(installRoot, "voice-models/tts/${it.removePrefix("$ASSET_TTS_DIR/")}") })
             }
@@ -96,5 +96,11 @@ class AssetModelInstaller(private val context: Context) {
         return children.flatMap { child -> listAssetFilesRecursively("$path/$child") }
     }
 
-    fun exists(): Boolean = llmModelFile.exists()
+    /** AssetManager has no exists() — try opening the file as the check. */
+    private fun assetExists(path: String): Boolean = try {
+        context.assets.open(path).use { }
+        true
+    } catch (e: Exception) {
+        false
+    }
 }
