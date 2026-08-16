@@ -38,6 +38,14 @@ jobs:
         rm -rf LamdaAI/app/src/main/cpp/llama.cpp
         git clone --depth 1 --branch b4200 https://github.com/ggerganov/llama.cpp LamdaAI/app/src/main/cpp/llama.cpp
 
+    - name: Download LLM model asset
+      working-directory: LamdaAI
+      run: |
+        mkdir -p app/src/main/assets/models
+        curl -fL -o "app/src/main/assets/models/SmolLM2-360M-Instruct-Q4_K_M.gguf" \
+          "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/main/SmolLM2-360M-Instruct-Q4_K_M.gguf"
+        ls -la app/src/main/assets/models/
+
     - name: Build APK with Gradle
       run: gradle assembleDebug --no-daemon
       working-directory: LamdaAI
