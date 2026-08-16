@@ -118,9 +118,13 @@ dependencies {
     // The CI workflow downloads this file into app/libs/ BEFORE this
     // build script runs — see .github/workflows/main.yml, step
     // "Download sherpa-onnx AAR".
+    //
+    // NOTE: sherpa-onnx.aar already bundles its own libonnxruntime.so —
+    // do NOT also add a separate onnxruntime-android dependency here, it
+    // causes a duplicate .so file conflict at packaging time
+    // (":app:mergeDebugNativeLibs" fails with "2 files found with path
+    // lib/arm64-v8a/libonnxruntime.so").
     // --------------------------------------------------------------------
     implementation(files("libs/sherpa-onnx.aar"))
-    // sherpa-onnx's AAR depends on onnxruntime's Java bindings at runtime;
-    // declare it explicitly rather than relying on it being bundled.
-    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.18.0")
 }
+</parameter>
