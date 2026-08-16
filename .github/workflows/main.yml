@@ -24,7 +24,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
 
     - name: Build APK with Gradle
-      run: gradle assembleDebug
+      run: gradle assembleDebug --stacktrace
       working-directory: LamdaAI
 
     - name: Upload APK Artifact
