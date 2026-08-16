@@ -33,6 +33,11 @@ jobs:
           https://github.com/k2-fsa/sherpa-onnx/releases/download/v1.12.40/sherpa-onnx-1.12.40.aar
         ls -la app/libs/
 
+    - name: Clone llama.cpp
+      run: |
+        rm -rf LamdaAI/app/src/main/cpp/llama.cpp
+        git clone --depth 1 --branch b4200 https://github.com/ggerganov/llama.cpp LamdaAI/app/src/main/cpp/llama.cpp
+
     - name: Build APK with Gradle
       run: gradle assembleDebug --no-daemon
       working-directory: LamdaAI
