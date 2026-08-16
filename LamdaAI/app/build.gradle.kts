@@ -104,13 +104,23 @@ dependencies {
     // withContext) — was previously only pulled in transitively via Room.
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
+    // --------------------------------------------------------------------
     // Offline speech engine (voice/VoiceManager.kt): wraps a Whisper ONNX
     // export for speech-to-text and a Piper/VITS ONNX voice for
-    // text-to-speech, both running fully on-device via onnxruntime. This is
-    // what backs "Whisper" and "Piper" in the original plan — rather than
-    // hand-rolling separate JNI bridges for two different C++ projects, both
-    // ride on this one maintained wrapper (bundled ASR/TTS model assets are
-    // downloaded into app/src/main/assets/ by the CI workflow, see
-    // .github/workflows/build.yml).
-    implementation("com.github.k2-fsa:sherpa-onnx:v1.10.23")
+    // text-to-speech, both running on-device via onnxruntime.
+    //
+    // sherpa-onnx is NOT reliably resolvable through JitPack — JitPack has
+    // to build this (large, NDK-based) library from source on first
+    // request, and that build frequently fails/times out on JitPack's
+    // shared infrastructure. Instead we pull the prebuilt .aar straight
+    // from the project's own GitHub Releases (this is k2-fsa's own
+    // documented distribution method) and reference it as a local file.
+    // The CI workflow downloads this file into app/libs/ BEFORE this
+    // build script runs — see .github/workflows/main.yml, step
+    // "Download sherpa-onnx AAR".
+    // --------------------------------------------------------------------
+    implementation(files("libs/sherpa-onnx.aar"))
+    // sherpa-onnx's AAR depends on onnxruntime's Java bindings at runtime;
+    // declare it explicitly rather than relying on it being bundled.
+    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.18.0")
 }
