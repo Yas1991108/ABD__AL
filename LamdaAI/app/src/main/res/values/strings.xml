@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">LamdaAI</string>
+    <string name="accessibility_service_description">
+        Lets LamdaAI read what\'s on screen and, only with your permission for
+        sensitive actions like sending or deleting something, tap, type, and
+        scroll on your behalf. Everything runs on-device — nothing is sent
+        anywhere.
+    </string>
+    <string name="overlay_notification_title">LamdaAI is active</string>
+    <string name="overlay_notification_text">Tap the bubble to talk to LamdaAI</string>
+    <string name="overlay_channel_name">LamdaAI assistant</string>
+    <string name="screencap_notification_title">LamdaAI is reading the screen</string>
+    <string name="screencap_channel_name">LamdaAI screen capture</string>
+</resources>
