@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: LamdaAI
 
     steps:
     - name: Checkout repository
@@ -22,11 +25,9 @@ jobs:
         cache: gradle
 
     - name: Grant execute permission for gradlew
-      working-directory: LamdaAI
       run: chmod +x gradlew
 
     - name: Build APK
-      working-directory: LamdaAI
       run: ./gradlew assembleDebug
 
     - name: Upload APK Artifact
