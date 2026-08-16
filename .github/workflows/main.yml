@@ -9,13 +9,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: LamdaAI
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: List files in repository
+      run: |
+        echo "=== Files in Root ==="
+        ls -la
+        echo "=== Searching for gradlew ==="
+        find . -name "gradlew"
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -24,14 +28,24 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-
-    - name: Build APK
-      run: ./gradlew assembleDebug
+    - name: Build with Gradle Wrapper
+      run: |
+        if [ -f "./gradlew" ]; then
+          chmod +x gradlew
+          ./gradlew assembleDebug
+        elif [ -f "./LamdaAI/gradlew" ]; then
+          cd LamdaAI
+          chmod +x gradlew
+          ./gradlew assembleDebug
+        else
+          echo "gradlew not found, generating wrapper..."
+          gradle wrapper
+          chmod +x gradlew
+          ./gradlew assembleDebug
+        fi
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: LamdaAI/app/build/outputs/apk/debug/app-debug.apk
+        path: "**/app/build/outputs/apk/debug/app-debug.apk"
